@@ -1,0 +1,25 @@
+{
+  "name": "webrtc-monitor",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "start": "webpack --config scripts/webpack.dev.config.js --watch",
+    "dev": "webpack --config scripts/webpack.dev.config.js",
+    "build": "webpack --config scripts/webpack.prod.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1",
+    "webpack-merge": "^4.2.0",
+    "webpack-dev-server": "^5.2.1"
+  }
+}

@@ -1,11 +1,10 @@
-**Read this in other languages: [English](README.md), [中文](README_zh.md).**
+**其他语言版本: [English](README.md), [中文](README_zh.md).**
 
 # webrtc-monitor
-webrtc monitor for browser
+在浏览器中使用的webrtc监控类
 
-
-## describe
-At present, it only supports statistics once every second
+## 用法
+目前暂时只支持1秒统计一次
 ```html
 const pc = new RTCPeerConnection();
 const monitor = new WebRTCMonitor(pc);
@@ -15,3 +14,4 @@ setInterval(() => {
   })
 }, 1000);
 ```
+

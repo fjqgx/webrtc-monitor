@@ -1,0 +1,86 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>webrtc monitor</title>
+</head>
+
+<body>
+  <video id="localStream" style="width: 320px; height: 240px;" autoplay muted></video>
+  <video id="remoteStream" style="width: 320px; height: 240px;" autoplay muted> </video>
+  <button id="deviceBtn">打开本地摄像头</button>
+  <button id="startBtn">建立连接</button>
+  <br/>
+  
+  <script src="../dist/index.js"></script>
+  <script>
+    let localStream = null;
+    let localVideo = document.getElementById("localStream");
+    let remoteVideo = document.getElementById("remoteStream")
+    let deviceBtn = document.getElementById("deviceBtn");
+    let startBtn = document.getElementById("startBtn");
+
+    let pc_pub = new RTCPeerConnection();
+    let pc_sub = new RTCPeerConnection();
+
+    const pub_monitor = new WebRTCMonitor(pc_pub);
+    const sub_monitor = new WebRTCMonitor(pc_sub);
+
+    setInterval(() => {
+      pub_monitor.getStats().then((data) => {
+        console.log("sender data monitor:", data);
+      }).catch((err) => {
+        console.log("sender err:", err);
+      })
+
+      sub_monitor.getStats().then((data) => {
+        console.log("receiver data monitor:",data);
+      }).catch((err) => {
+        console.log("receiver err:", err);
+      })
+    }, 1000);
+
+
+    deviceBtn.addEventListener("click", () => {
+      navigator.mediaDevices.getUserMedia({audio: true, video: true }).then((mediastream) => {
+        localStream = mediastream;
+        localVideo.srcObject = mediastream;
+      })
+    })
+
+    startBtn.addEventListener("click", () => {
+      pc_pub.addTrack(localStream.getAudioTracks()[0], localStream);
+      pc_pub.addTrack(localStream.getVideoTracks()[0], localStream);
+      pc_pub.createOffer().then((offer) => {
+        pc_pub.setLocalDescription(offer).then(() => {
+          pc_sub.setRemoteDescription(offer).then(() => {
+            pc_sub.createAnswer().then((answer) => {
+              pc_sub.setLocalDescription(answer).then(() => {
+                pc_pub.setRemoteDescription(answer).then(() => {
+                })
+              })
+            })
+          })
+        })
+      })
+    })
+
+    pc_pub.addEventListener('icecandidate', (event) => {
+      if (event.candidate) {
+        pc_sub.addIceCandidate(event.candidate);
+      }
+    })
+
+    pc_sub.addEventListener('icecandidate', (event) => {
+      if (event.candidate) {
+        pc_pub.addIceCandidate(event.candidate);
+      }
+    })
+
+    pc_sub.addEventListener('track', (event) => {
+      remoteVideo.srcObject = event.streams[0];
+    })
+
+    
+  </script>
+</body>
+
