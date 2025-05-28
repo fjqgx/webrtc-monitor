@@ -70,33 +70,38 @@ export abstract class Monitor {
     return new Promise((resolve, reject) => {
       this.monitor && this.monitor.getStats().then((report: RTCStatsReport) => {
         report.forEach((stats: RTCStats) => {
-          switch (stats.type) {
-            case RTCStatsType.OutboundRTP:
-              this.onOutboundRTP(stats);
-              break;
-
-            case RTCStatsType.MediaSource:
-              this.onMediaSource(stats);
-              break;
-
-            case RTCStatsType.Codec:
-              this.onCodec(stats);
-              break;
-
-            case RTCStatsType.CandidatePair:
-              this.onCandidatePair(stats);
-              break;
-
-            case RTCStatsType.RemoteInboundRTP:
-              this.onRemoteInboundRTP(stats);
-              break;
-
-            case RTCStatsType.InboundRTP:
-              this.onInboundRTP(stats);
-              break;
-
-            default:
-              break;
+          if (stats) {
+            switch (stats.type) {
+              case RTCStatsType.OutboundRTP:
+                this.onOutboundRTP(stats);
+                break;
+  
+              case RTCStatsType.MediaSource:
+                this.onMediaSource(stats);
+                break;
+  
+              case RTCStatsType.Codec:
+                this.onCodec(stats);
+                break;
+  
+              case RTCStatsType.CandidatePair:
+                this.onCandidatePair(stats);
+                break;
+  
+              case RTCStatsType.RemoteInboundRTP:
+                this.onRemoteInboundRTP(stats);
+                break;
+  
+              case RTCStatsType.InboundRTP:
+                this.onInboundRTP(stats);
+                break;
+  
+              default:
+                if (stats) {
+                  console.log(stats.type, "   ", stats)
+                }
+                break;
+            }
           }
         })
       })

@@ -71,37 +71,44 @@ export class VideoSenderMonitorData extends SenderMonitorData {
   }
 
   getMonitorData(): VideoSenderData | undefined {
-    return {
-      availableOutgoingBitrate: this.availableOutgoingBitrate,
-      bytesSent: this.bytesSent,
-      bytesSentPerSecond: this.bytesSentPerSecond,
-      packetsSent: this.packetsSent,
-      packetsSentPerSecond: this.packetsSentPerSecond,
-      packetsLost: this.packetsLost,
-      packetsLostPerSecond: this.packetsLostPerSecond,
-      nackCount: this.nackCount,
-      nackCountPerSecond: this.nackCountPerSecond,
-      currentroundTripTime: this.currentroundTripTime,
-      codec: this.codec,
-      jitter: this.jitter,
-      framesPerSecond: this.framesPerSecond,
-      width: this.width,
-      height: this.height,
-      sentFrameWidth: this.sentFrameWidth,
-      sentFrameHeight: this.sentFrameHeight,
-      sentFrameRate: this.sentFrameRate,
-      totalFramesEncoded: this.totalFramesEncoded,
-      framesEncodedPerSecond: this.framesEncodedPerSecond,
-      totalFramesSent: this.totalFramesSent,
-      framesSentPerSecond: this.framesSentPerSecond,
-      keyFramesencoded: this.keyFramesEncoded,
-      pliCount: this.pliCount,
-      pliPerSecond: this.pliPerSecond,
-      encodeTimePerFrame: this.encodeTimePerFrame,
-      encoderImplementation: this.encoderImplementation,
-      qpPerSecond: this.qpPerSecond,
-      qpSum: this.qpSum,
+    if (this.lastOutboundRTPTmeStamp > -1) {
+      const data: VideoSenderData = {
+        availableOutgoingBitrate: this.availableOutgoingBitrate,
+        bytesSent: this.bytesSent,
+        bytesSentPerSecond: this.bytesSentPerSecond,
+        packetsSent: this.packetsSent,
+        packetsSentPerSecond: this.packetsSentPerSecond,
+        packetsLost: this.packetsLost,
+        packetsLostPerSecond: this.packetsLostPerSecond,
+        nackCount: this.nackCount,
+        nackCountPerSecond: this.nackCountPerSecond,
+        currentroundTripTime: this.currentroundTripTime,
+        codec: this.codec,
+        jitter: this.jitter,
+        framesPerSecond: this.framesPerSecond,
+        width: this.width,
+        height: this.height,
+        sentFrameWidth: this.sentFrameWidth,
+        sentFrameHeight: this.sentFrameHeight,
+        sentFrameRate: this.sentFrameRate,
+        totalFramesEncoded: this.totalFramesEncoded,
+        framesEncodedPerSecond: this.framesEncodedPerSecond,
+        totalFramesSent: this.totalFramesSent,
+        framesSentPerSecond: this.framesSentPerSecond,
+        keyFramesencoded: this.keyFramesEncoded,
+        pliCount: this.pliCount,
+        pliPerSecond: this.pliPerSecond,
+        // encodeTimePerFrame: this.encodeTimePerFrame,
+        encoderImplementation: this.encoderImplementation,
+        qpPerSecond: this.qpPerSecond,
+        qpSum: this.qpSum,
+      };
+      if (this.encodeTimePerFrame > -1) {
+        data.encodeTimePerFrame = this.encodeTimePerFrame;
+      }
+      return data;
     }
+    return undefined;
   }
 
   protected reset (): void {

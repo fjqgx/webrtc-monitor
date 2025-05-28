@@ -27,8 +27,8 @@ export interface AudioSenderData {
   packetsSentPerSecond: number;
   packetsLost: number;
   packetsLostPerSecond: number;
-  nackCount: number;
-  nackCountPerSecond: number;
+  nackCount?: number;
+  nackCountPerSecond?: number;
   currentroundTripTime: number;
   codec: string;
   jitter: number;
@@ -62,32 +62,32 @@ export interface VideoSenderData {
   keyFramesencoded: number;
   pliCount: number;
   pliPerSecond: number;
-  encodeTimePerFrame: number;
+  encodeTimePerFrame?: number;
   encoderImplementation: string;
   qpPerSecond: number;
   qpSum: number;
 }
 
 export interface AudioReceiverData {
-  availableOutgoingBitrate: number;
+  availableOutgoingBitrate?: number;
   bytesReceived: number;
   bytesReceivedPerSecond: number;
   packetsReceived: number;
   packetsReceivedPerSecond: number;
   packetsLost: number;
   packetsLostPerSecond: number;
-  nackCount: number;
-  nackCountPerSecond: number;
-  currentroundTripTime: number;
+  nackCount?: number;
+  nackCountPerSecond?: number;
+  currentroundTripTime?: number;
   codec: string;
   jitter: number;
   audioLevel: number;
   totalAudioEnergy: number;
-  playoutId: string;
+  playoutId?: string;
 }
 
 export interface VideoReceiverData {
-  availableOutgoingBitrate: number;
+  availableOutgoingBitrate?: number;
   bytesReceived: number;
   bytesReceivedPerSecond: number;
   packetsReceived: number;
@@ -96,7 +96,7 @@ export interface VideoReceiverData {
   packetsLostPerSecond: number;
   nackCount: number;
   nackCountPerSecond: number;
-  currentroundTripTime: number;
+  currentroundTripTime?: number;
   codec: string;
   jitter: number;
   frameHeight: number;
@@ -107,8 +107,8 @@ export interface VideoReceiverData {
   framesDroppedPerSecond: number;
   framesReceived: number;
   framesReceivedPerSecond: number;
-  keyFramesDecoded: number;
-  keyFramesDecodedPerSecond: number;
+  keyFramesDecoded?: number;
+  keyFramesDecodedPerSecond?: number;
   pliCount: number;
   pliCountPerSecond: number;
 }

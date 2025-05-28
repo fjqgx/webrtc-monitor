@@ -50,32 +50,44 @@ export class VideoReceiverMonitorData extends ReceiverMonitorData {
   }
 
   getMonitorData(): VideoReceiverData | undefined {
-    return {
-      availableOutgoingBitrate: this.availableOutgoingBitrate,
-      bytesReceived: this.bytesReceived,
-      bytesReceivedPerSecond: this.bytesReceivedPerSecond,
-      packetsReceived: this.packetsReceived,
-      packetsReceivedPerSecond: this.packetsLostPerSecond,
-      packetsLost: this.packetsLost,
-      packetsLostPerSecond: this.packetsLostPerSecond,
-      nackCount: this.nackCount,
-      nackCountPerSecond: this.nackCountPerSecond,
-      currentroundTripTime: this.currentroundTripTime,
-      codec: this.codec,
-      jitter: this.jitter,
-      frameHeight: this.frameHeight,
-      frameWidth: this.framewidth,
-      framesDecoded: this.framesDecoded,
-      framesDecodedPerSecond: this.framesDecodedPerSecond,
-      framesDropped: this.framesDropped,
-      framesDroppedPerSecond: this.framesDroppedPerSecond,
-      framesReceived: this.framesReceived,
-      framesReceivedPerSecond: this.framesReceivedPerSecond,
-      keyFramesDecoded: this.keyFramesDecoded,
-      keyFramesDecodedPerSecond: this.keyFramesDecodedPerSecond,
-      pliCount: this.pliCount,
-      pliCountPerSecond: this.pliCountPerSecond,
+    if (this.lastInboundRTPTmeStamp > -1) {
+      const data: VideoReceiverData = {
+        bytesReceived: this.bytesReceived,
+        bytesReceivedPerSecond: this.bytesReceivedPerSecond,
+        packetsReceived: this.packetsReceived,
+        packetsReceivedPerSecond: this.packetsLostPerSecond,
+        packetsLost: this.packetsLost,
+        packetsLostPerSecond: this.packetsLostPerSecond,
+        nackCount: this.nackCount,
+        nackCountPerSecond: this.nackCountPerSecond,
+        codec: this.codec,
+        jitter: this.jitter,
+        frameHeight: this.frameHeight,
+        frameWidth: this.framewidth,
+        framesDecoded: this.framesDecoded,
+        framesDecodedPerSecond: this.framesDecodedPerSecond,
+        framesDropped: this.framesDropped,
+        framesDroppedPerSecond: this.framesDroppedPerSecond,
+        framesReceived: this.framesReceived,
+        framesReceivedPerSecond: this.framesReceivedPerSecond,
+        pliCount: this.pliCount,
+        pliCountPerSecond: this.pliCountPerSecond,
+      }
+      if (this.availableOutgoingBitrate > -1) {
+        data.availableOutgoingBitrate = this.availableOutgoingBitrate;
+      }
+      if (this.keyFramesDecoded > -1) {
+        data.keyFramesDecoded = this.keyFramesDecoded;
+        if (this.keyFramesDecodedPerSecond > -1) {
+          data.keyFramesDecodedPerSecond = this.keyFramesDecodedPerSecond;
+        }
+      }
+      if (this.currentroundTripTime > -1) {
+        data.currentroundTripTime = this.currentroundTripTime;
+      }
+      return data;
     }
+    return undefined;
   }
 }
 

@@ -2,6 +2,8 @@ import { MonitorData } from "./monitor-data";
 
 export abstract class ReceiverMonitorData extends MonitorData {
 
+  protected lastInboundRTPTmeStamp = -1;
+
   protected bytesReceived: number = -1;
   protected bytesReceivedPerSecond: number = -1;
   protected packetsReceived: number = -1;
@@ -17,7 +19,7 @@ export abstract class ReceiverMonitorData extends MonitorData {
 
   protected onInboundRTPData (timestamp: number, bytesReceived: number, jitter: number, packetsLost: number, packetsReceived: number,
     nackCount: number): void {
-    this.lastOutboundRTPTmeStamp = timestamp;
+    this.lastInboundRTPTmeStamp = timestamp;
     if (this.bytesReceived > -1) {
       this.bytesReceivedPerSecond = bytesReceived - this.bytesReceived;
     }
@@ -40,6 +42,15 @@ export abstract class ReceiverMonitorData extends MonitorData {
 
   protected reset(): void {
     super.reset();
+    this.lastInboundRTPTmeStamp = -1;
+    this.bytesReceived = -1;
+    this.bytesReceivedPerSecond = -1;
+    this.packetsReceived = -1;
+    this.packetsReceivedPerSecond = -1;
+    this.packetsLost = -1;
+    this.packetsLostPerSecond = -1;
+    this.nackCount = -1;
+    this.nackCountPerSecond = -1;
   }
 }
 

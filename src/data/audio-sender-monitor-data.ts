@@ -13,22 +13,31 @@ export class AudioSenderMonitorData extends SenderMonitorData {
   }
 
   getMonitorData(): AudioSenderData | undefined {
-    return {
-      availableOutgoingBitrate: this.availableOutgoingBitrate,
-      bytesSent: this.bytesSent,
-      bytesSentPerSecond: this.bytesSentPerSecond,
-      packetsSent: this.packetsSent,
-      packetsSentPerSecond: this.packetsSentPerSecond,
-      packetsLost: this.packetsLost,
-      packetsLostPerSecond: this.packetsLostPerSecond,
-      nackCount: this.nackCount,
-      nackCountPerSecond: this.nackCountPerSecond,
-      currentroundTripTime: this.currentroundTripTime,
-      codec: this.codec,
-      jitter: this.jitter,
-      audioLevel: this.audioLevel,
-      totalAudioEnergy: this.totalAudioEnergy,
+    if (this.lastOutboundRTPTmeStamp > -1) {
+      const data: AudioSenderData = {
+        availableOutgoingBitrate: this.availableOutgoingBitrate,
+        bytesSent: this.bytesSent,
+        bytesSentPerSecond: this.bytesSentPerSecond,
+        packetsSent: this.packetsSent,
+        packetsSentPerSecond: this.packetsSentPerSecond,
+        packetsLost: this.packetsLost,
+        packetsLostPerSecond: this.packetsLostPerSecond,
+        nackCount: this.nackCount,
+        nackCountPerSecond: this.nackCountPerSecond,
+        currentroundTripTime: this.currentroundTripTime,
+        codec: this.codec,
+        jitter: this.jitter,
+        audioLevel: this.audioLevel,
+        totalAudioEnergy: this.totalAudioEnergy,
+      };
+      if (this.nackCount > -1) {
+        data.nackCount = this.nackCount;
+        if (this.nackCountPerSecond > -1) {
+          data.nackCountPerSecond = this.nackCountPerSecond;
+        }
+      }
     }
+    return undefined;
   }
 
   onOutboundRTP (timestamp: number, active: boolean, bytesSent: number, nackCount: number, packetsSent: number): void {

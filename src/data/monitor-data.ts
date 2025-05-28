@@ -10,8 +10,6 @@ export abstract class MonitorData {
 
   protected availableOutgoingBitrate: number = -1;
 
-  protected lastOutboundRTPTmeStamp: number = -1;
-
   constructor () {
 
   }
@@ -33,7 +31,6 @@ export abstract class MonitorData {
     this.codec = '';
     this.currentroundTripTime = -1;
     this.availableOutgoingBitrate = -1;
-    this.lastOutboundRTPTmeStamp = -1;
     this.jitter = -1;
   }
 }

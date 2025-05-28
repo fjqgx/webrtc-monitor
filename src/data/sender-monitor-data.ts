@@ -2,6 +2,8 @@ import { MonitorData } from "./monitor-data";
 
 export abstract class SenderMonitorData extends MonitorData {
 
+  protected lastOutboundRTPTmeStamp: number = -1;
+
   protected active: boolean = false;
 
   protected bytesSent: number = -1;
@@ -57,6 +59,7 @@ export abstract class SenderMonitorData extends MonitorData {
 
   protected reset (): void {
     super.reset();
+    this.lastOutboundRTPTmeStamp = -1;
     this.active = false;
     this.bytesSent = -1;
     this.bytesSentPerSecond = -1;
