@@ -28,6 +28,7 @@ export interface ReceiverMonitorData {
 }
 
 export interface AudioSenderData {
+  active?: boolean;
   availableOutgoingBitrate: number;
   bytesSent: number;
   bytesSentPerSecond: number;
@@ -45,6 +46,7 @@ export interface AudioSenderData {
 }
 
 export interface VideoSenderData {
+  active?: boolean;
   availableOutgoingBitrate: number;
   bytesSent: number;
   bytesSentPerSecond: number;

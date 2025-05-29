@@ -31,11 +31,8 @@ export class VideoSenderMonitorData extends SenderMonitorData {
     framesEncoded: number, framesSent: number, keyFramesEncoded: number, pliCount: number, totalEncodeTime: number, frameHeight: number, frameWidth: number,
     encoderImplementation: string, qpSum: number): void {
     super.onOutboundRTPData(timestamp, active, bytesSent, packetsSent, nackCount);
-
-    this.sentFrameWidth = frameWidth;
-    this.sentFrameHeight = frameHeight;
+    this.onTrack(frameWidth, frameHeight, framesSent);   
     this.sentFrameRate = frameRate;
-
     if (this.totalFramesEncoded > -1) {
       this.framesEncodedPerSecond = framesEncoded - this.totalFramesEncoded;
       if (this.totalEncodeTime > -1) {
@@ -46,10 +43,6 @@ export class VideoSenderMonitorData extends SenderMonitorData {
       }
     }
     this.totalFramesEncoded = framesEncoded;
-    if (this.totalFramesSent > -1) {
-      this.framesSentPerSecond = framesSent - this.totalFramesSent;
-    }
-    this.totalFramesSent = framesSent;
     this.keyFramesEncoded = keyFramesEncoded;
     if (this.pliCount > -1) {
       this.pliPerSecond = pliCount - this.pliCount;
@@ -68,6 +61,21 @@ export class VideoSenderMonitorData extends SenderMonitorData {
     this.framesPerSecond = framesPerSecond;
     this.width = width;
     this.height = height;
+  }
+
+  onTrack (frameWidth: number, frameHeight: number, framesSent: number): void {
+    if (frameWidth !== undefined) {
+      this.sentFrameWidth = frameWidth;  
+    }
+    if (frameHeight !== undefined) {
+      this.sentFrameHeight = frameHeight;
+    }
+    if (framesSent !== undefined) {
+      if (this.totalFramesSent > -1) {
+        this.framesSentPerSecond = framesSent - this.totalFramesSent;
+      }
+      this.totalFramesSent = framesSent;
+    }
   }
 
   getMonitorData(): VideoSenderData | undefined {
@@ -93,6 +101,9 @@ export class VideoSenderMonitorData extends SenderMonitorData {
         qpPerSecond: this.qpPerSecond,
         qpSum: this.qpSum,
       };
+      if (this.active !== undefined) {
+        data.active = this.active;
+      }
       if (this.encodeTimePerFrame > -1) {
         data.encodeTimePerFrame = this.encodeTimePerFrame;
       }

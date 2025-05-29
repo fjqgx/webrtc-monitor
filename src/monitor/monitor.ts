@@ -3,6 +3,7 @@ import { AudioReceiverData, AudioSenderData, VideoReceiverData, VideoSenderData 
 export const enum RTCStatsType {
   OutboundRTP = 'outbound-rtp',
   RemoteInboundRTP = 'remote-inbound-rtp',
+  Track = 'track',
 
   InboundRTP = 'inbound-rtp',
 
@@ -73,7 +74,7 @@ export abstract class Monitor {
           if (stats) {
             switch (stats.type) {
               case RTCStatsType.OutboundRTP:
-                this.onOutboundRTP(stats);
+                this.onOutboundRTP(stats, this.monitor !== undefined ? this.monitor.track : undefined);
                 break;
   
               case RTCStatsType.MediaSource:
@@ -95,6 +96,10 @@ export abstract class Monitor {
               case RTCStatsType.InboundRTP:
                 this.onInboundRTP(stats);
                 break;
+
+              case RTCStatsType.Track:
+                this.onTrack(stats);
+                break;
   
               default:
                 break;
@@ -111,7 +116,7 @@ export abstract class Monitor {
 
   abstract getMonitorData (): AudioSenderData | VideoSenderData | AudioReceiverData | VideoReceiverData | undefined;
 
-  protected onOutboundRTP (stats: RTCStats): void {};
+  protected onOutboundRTP (stats: RTCStats, track: MediaStreamTrack | null | undefined): void {};
 
   protected onMediaSource (stats: RTCStats): void {};
 
@@ -122,4 +127,6 @@ export abstract class Monitor {
   protected onRemoteInboundRTP (stats: RTCStats): void {};
 
   protected onInboundRTP (stats: RTCStats): void {};
+
+  protected onTrack (stats: RTCStats): void {};
 }

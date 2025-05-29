@@ -25,6 +25,9 @@ export class AudioSenderMonitorData extends SenderMonitorData {
         audioLevel: this.audioLevel,
         totalAudioEnergy: this.totalAudioEnergy,
       };
+      if (this.active !== undefined) {
+        data.active = this.active;
+      }
       if (this.packetsLost > -1) {
         data.packetsLost = this.packetsLost;
         if (this.packetsLostPerSecond > -1) {

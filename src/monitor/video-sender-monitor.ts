@@ -14,7 +14,10 @@ export class VideoSenderMonitor extends Monitor {
     return this.monitorData.getMonitorData();
   }
 
-  protected onOutboundRTP(stats: RTCStats): void {
+  protected onOutboundRTP(stats: RTCStats, track: MediaStreamTrack | null | undefined): void {
+    if (stats.active === undefined && track) {
+      stats.active = track.enabled;
+    }
     this.monitorData.onOutboundRTP(stats.timestamp, stats.active, stats.rid, stats.bytesSent, stats.packetsSent, stats.nackCount,
       stats.framesPerSecond, stats.framesEncoded, stats.framesSent, stats.keyFramesEncoded, stats.pliCount, stats.totalEncodeTime,
       stats.frameHeight, stats.frameWidth, stats.encoderImplementation, stats.qpSum);
@@ -34,6 +37,10 @@ export class VideoSenderMonitor extends Monitor {
 
   protected onRemoteInboundRTP(stats: RTCStats): void {
     this.monitorData.onRemoteInboundRTP(stats.packetsLost, stats.fractionLost, stats.jitter);
+  }
+
+  protected onTrack(stats: RTCStats): void {
+    this.monitorData.onTrack(stats.frameWidth, stats.frameHeight, stats.framesSent);
   }
 }
 

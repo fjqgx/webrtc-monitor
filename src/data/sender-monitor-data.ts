@@ -4,7 +4,7 @@ export abstract class SenderMonitorData extends MonitorData {
 
   protected lastOutboundRTPTmeStamp: number = -1;
 
-  protected active: boolean = false;
+  protected active?: boolean = undefined;
 
   protected bytesSent: number = -1;
   protected bytesSentPerSecond: number = -1;
@@ -26,7 +26,7 @@ export abstract class SenderMonitorData extends MonitorData {
     super();
   }
 
-  get isActive (): boolean {
+  get isActive (): boolean | undefined {
     return this.active;
   }
 
@@ -60,7 +60,7 @@ export abstract class SenderMonitorData extends MonitorData {
   protected reset (): void {
     super.reset();
     this.lastOutboundRTPTmeStamp = -1;
-    this.active = false;
+    this.active = undefined;
     this.bytesSent = -1;
     this.bytesSentPerSecond = -1;
     this.packetsSent = -1;

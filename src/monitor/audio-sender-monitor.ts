@@ -14,7 +14,10 @@ export class AudioSenderMonitor extends Monitor {
     return this.monitorData.getMonitorData();
   }
 
-  protected onOutboundRTP(stats: RTCStats): void {
+  protected onOutboundRTP(stats: RTCStats, track: MediaStreamTrack | null | undefined): void {
+    if (stats.active === undefined && track) {
+      stats.active = track.enabled;
+    }
     this.monitorData.onOutboundRTP(stats.timestamp, stats.active, stats.bytesSent, stats.nackCount, stats.packetsSent);
   }
 
