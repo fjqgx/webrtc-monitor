@@ -4,21 +4,27 @@ export declare class WebRTCMonitor {
 
   constructor (pc: RTCPeerConnection);
 
-  getStats (): Promise<WebRTcMonitorData>;
+  getStats (): Promise<WebRTCMonitorData>;
 
-  getMonitorData (): WebRTcMonitorData;
+  getMonitorData (): WebRTCMonitorData;
+
+  destroy (): void;
 }
 
 
-export interface WebRTcMonitorData {
-  send?: {
-    audio?: AudioSenderData;
-    video?: VideoSenderData;
-  };
-  receive?: {
-    audio?: AudioReceiverData;
-    video?: VideoReceiverData;
-  }
+export interface WebRTCMonitorData {
+  send?: SenderMonitorData;
+  receive?: ReceiverMonitorData;
+}
+
+export interface SenderMonitorData {
+  audio?: AudioSenderData;
+  video?: VideoSenderData;
+}
+
+export interface ReceiverMonitorData {
+  audio?: AudioReceiverData;
+  video?: VideoReceiverData;
 }
 
 export interface AudioSenderData {

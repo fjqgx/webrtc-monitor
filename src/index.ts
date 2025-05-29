@@ -1,4 +1,4 @@
-import { AudioReceiverData, AudioSenderData, VideoReceiverData, VideoSenderData, WebRTcMonitorData } from "../types";
+import { AudioReceiverData, AudioSenderData, VideoReceiverData, VideoSenderData, WebRTCMonitorData } from "../types";
 import { AudioReceiverMonitor } from "./monitor/audio-receiver-monitor";
 import { AudioSenderMonitor } from "./monitor/audio-sender-monitor";
 import { VideoReceiverMonitor } from "./monitor/video-receiver-monitor";
@@ -18,7 +18,7 @@ export class WebRTCMonitor extends EventEmitter {
 
   protected videoReceiverMonitor?: VideoReceiverMonitor;
 
-  protected monitorData: WebRTcMonitorData = {};
+  protected monitorData: WebRTCMonitorData = {};
 
   constructor (pc: RTCPeerConnection) {
     super();
@@ -32,7 +32,7 @@ export class WebRTCMonitor extends EventEmitter {
     this.init();
   }
 
-  getStats (): Promise<WebRTcMonitorData> {
+  getStats (): Promise<WebRTCMonitorData> {
     return new Promise((resolve, reject) => {
       this.monitorData = {};
       if (!this.pc) {
@@ -81,12 +81,27 @@ export class WebRTCMonitor extends EventEmitter {
     })
   }
 
-  getMonitorData (): WebRTcMonitorData {
+  getMonitorData (): WebRTCMonitorData {
     return this.monitorData;
   }
 
   destroy (): void {
-    if (this.audioSenderMonitor)
+    if (this.audioSenderMonitor) {
+      this.audioSenderMonitor.destroy();
+      this.audioSenderMonitor = undefined;
+    }
+    if (this.videoSenderMonitor) {
+      this.videoSenderMonitor.destroy();
+      this.videoSenderMonitor = undefined;
+    }
+    if (this.audioReceiverMonitor) {
+      this.audioReceiverMonitor.destroy();
+      this.audioReceiverMonitor = undefined;
+    }
+    if (this.videoReceiverMonitor) {
+      this.videoReceiverMonitor.destroy();
+      this.videoReceiverMonitor = undefined;
+    }
     this.pc = undefined;
   }
 
