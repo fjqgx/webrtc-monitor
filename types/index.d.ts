@@ -5,6 +5,8 @@ export declare class WebRTCMonitor {
   constructor (pc: RTCPeerConnection);
 
   getStats (): Promise<WebRTcMonitorData>;
+
+  getMonitorData (): WebRTcMonitorData;
 }
 
 

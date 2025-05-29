@@ -5,6 +5,8 @@
 
 ## 用法
 目前暂时只支持1秒统计一次
+
+1. 异步获取结果
 ```html
 const pc = new RTCPeerConnection();
 const monitor = new WebRTCMonitor(pc);
@@ -15,3 +17,14 @@ setInterval(() => {
 }, 1000);
 ```
 
+2. 同步获取结果
+
+```
+const pc = new RTCPeerConnection();
+const monitor = new WebRTCMonitor(pc);
+setInterval(() => {
+  monitor.getStats();
+  // 这里获取的是上一秒的统计结果
+  console.log("monitor:", monitor.getMonitorData());
+}, 1000);
+```

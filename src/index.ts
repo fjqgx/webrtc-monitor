@@ -18,6 +18,8 @@ export class WebRTCMonitor extends EventEmitter {
 
   protected videoReceiverMonitor?: VideoReceiverMonitor;
 
+  protected monitorData: WebRTcMonitorData = {};
+
   constructor (pc: RTCPeerConnection) {
     super();
     this.pc = pc;
@@ -32,9 +34,9 @@ export class WebRTCMonitor extends EventEmitter {
 
   getStats (): Promise<WebRTcMonitorData> {
     return new Promise((resolve, reject) => {
-      const monitorData: WebRTcMonitorData = {};
+      this.monitorData = {};
       if (!this.pc) {
-        resolve(monitorData);
+        resolve(this.monitorData);
         return;
       }
 
@@ -42,7 +44,7 @@ export class WebRTCMonitor extends EventEmitter {
         this.audioSenderMonitor.getStats();
         const audioData: AudioSenderData | undefined = this.audioSenderMonitor.getMonitorData();
         if (audioData) {
-          monitorData.send = {
+          this.monitorData.send = {
             audio: audioData
           }
         }
@@ -52,8 +54,8 @@ export class WebRTCMonitor extends EventEmitter {
         this.videoSenderMonitor.getStats();
         const videoData: VideoSenderData | undefined = this.videoSenderMonitor.getMonitorData();
         if (videoData) {
-          monitorData.send = monitorData.send || {};
-          monitorData.send.video = videoData;
+          this.monitorData.send = this.monitorData.send || {};
+          this.monitorData.send.video = videoData;
         }
       }
 
@@ -61,7 +63,7 @@ export class WebRTCMonitor extends EventEmitter {
         this.audioReceiverMonitor.getStats();
         const audioData: AudioReceiverData | undefined = this.audioReceiverMonitor.getMonitorData();
         if (audioData) {
-          monitorData.receive = {
+          this.monitorData.receive = {
             audio: audioData
           }
         }
@@ -71,13 +73,16 @@ export class WebRTCMonitor extends EventEmitter {
         this.videoReceiverMonitor.getStats();
         const videoData: VideoReceiverData | undefined = this.videoReceiverMonitor.getMonitorData();
         if (videoData) {
-          monitorData.receive = monitorData.receive || {};
-          monitorData.receive.video = videoData;
+          this.monitorData.receive = this.monitorData.receive || {};
+          this.monitorData.receive.video = videoData;
         }
       }
-
-      resolve(monitorData);
+      resolve(this.monitorData);
     })
+  }
+
+  getMonitorData (): WebRTcMonitorData {
+    return this.monitorData;
   }
 
   destroy (): void {
