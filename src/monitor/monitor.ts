@@ -97,9 +97,6 @@ export abstract class Monitor {
                 break;
   
               default:
-                if (stats) {
-                  console.log(stats.type, "   ", stats)
-                }
                 break;
             }
           }

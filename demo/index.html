@@ -26,36 +26,11 @@
     const sub_monitor = new WebRTCMonitor(pc_sub);
 
     setInterval(() => {
-      // pub_monitor.getStats().then((data) => {
-      //   console.log("sender data monitor:", data);
-      // }).catch((err) => {
-      //   console.log("sender err:", err);
-      // })
-
-      sub_monitor.getStats().then((data) => {
-        console.log("receiver data monitor:",data);
+      pub_monitor.getStats().then((data) => {
+        console.log("sender data monitor:", data);
       }).catch((err) => {
-        console.log("receiver err:", err);
+        console.log("sender err:", err);
       })
-
-      // pc_sub.getStats().then((res) => {
-      //   res.forEach((stats) => {
-      //     if (stats) {
-      //       if (stats.type === "transport") {
-
-      //         console.log("aaaa:", stats);
-      //         // // Firefox 的可用带宽估计字段（注意：非标准名称）
-      //         // if (report.bitrateEstimate !== undefined) {
-      //         //   availableBitrate = report.bitrateEstimate; // 单位：bps
-      //         // }
-      //         // // 或较新版本中的字段
-      //         // else if (report.availableOutgoingBitrate !== undefined) {
-      //         //   availableBitrate = report.availableOutgoingBitrate;
-      //         // }
-      //       }
-      //     }
-      //   })
-      // })
     }, 1000);
 
 

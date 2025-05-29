@@ -4,7 +4,7 @@ import { ReceiverMonitorData } from "./receiver-monitor-data";
 export class VideoReceiverMonitorData extends ReceiverMonitorData {
 
   protected frameHeight: number = -1;
-  protected framewidth: number = -1;
+  protected frameWidth: number = -1;
   protected framesDecoded: number = -1;
   protected framesDecodedPerSecond: number = -1;
   protected framesDropped: number = -1;
@@ -20,7 +20,7 @@ export class VideoReceiverMonitorData extends ReceiverMonitorData {
     super();
   }
 
-  onInboundRTP (timestamp: number, bytesReceived: number, frameHeight: number, framewidth: number, framesDecoded: number,
+  onInboundRTP (timestamp: number, bytesReceived: number, frameHeight: number, frameWidth: number, framesDecoded: number,
     framesDropped: number, framesReceived: number, jitter: number, keyFramesDecoded: number, nackCount: number,
     packetsLost: number, packetsReceived: number, pliCount: number): void {
     super.onInboundRTPData(timestamp, bytesReceived, jitter, packetsLost, packetsReceived, nackCount);
@@ -41,7 +41,7 @@ export class VideoReceiverMonitorData extends ReceiverMonitorData {
       this.pliCountPerSecond = pliCount - this.pliCount;
     }
     this.frameHeight = frameHeight;
-    this.framewidth = framewidth;
+    this.frameWidth = frameWidth;
     this.framesDecoded = framesDecoded;
     this.framesDropped = framesDropped;
     this.framesReceived = framesReceived;
@@ -61,15 +61,8 @@ export class VideoReceiverMonitorData extends ReceiverMonitorData {
         nackCount: this.nackCount,
         nackCountPerSecond: this.nackCountPerSecond,
         codec: this.codec,
-        jitter: this.jitter,
-        frameHeight: this.frameHeight,
-        frameWidth: this.framewidth,
         framesDecoded: this.framesDecoded,
         framesDecodedPerSecond: this.framesDecodedPerSecond,
-        framesDropped: this.framesDropped,
-        framesDroppedPerSecond: this.framesDroppedPerSecond,
-        framesReceived: this.framesReceived,
-        framesReceivedPerSecond: this.framesReceivedPerSecond,
         pliCount: this.pliCount,
         pliCountPerSecond: this.pliCountPerSecond,
       }
@@ -84,6 +77,27 @@ export class VideoReceiverMonitorData extends ReceiverMonitorData {
       }
       if (this.currentroundTripTime > -1) {
         data.currentroundTripTime = this.currentroundTripTime;
+      }
+      if (this.jitter > -1) {
+        data.jitter = this.jitter;
+      }
+      if (this.frameHeight > -1) {
+        data.frameHeight = this.frameHeight;
+      }
+      if (this.frameWidth > -1) {
+        data.frameWidth = this.frameWidth;
+      }
+      if (this.framesDropped > -1) {
+        data.framesDropped = this.framesDropped;
+        if (this.framesDroppedPerSecond > -1) {
+          data.framesDroppedPerSecond = this.framesDecodedPerSecond;
+        }
+      }
+      if (this.framesReceived > -1) {
+        data.framesReceived = this.framesReceived;
+        if (this.framesReceivedPerSecond > -1) {
+          data.framesReceivedPerSecond = this.framesReceivedPerSecond;
+        }
       }
       return data;
     }

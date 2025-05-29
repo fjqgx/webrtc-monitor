@@ -31,8 +31,6 @@ export class AudioReceiverMonitorData extends ReceiverMonitorData {
         packetsLostPerSecond: this.packetsLostPerSecond,
         codec: this.codec,
         jitter: this.jitter,
-        audioLevel: this.audioLevel,
-        totalAudioEnergy: this.totalAudioEnergy,
       };
       if (this.availableOutgoingBitrate > -1) {
         data.availableOutgoingBitrate = this.availableOutgoingBitrate;
@@ -48,6 +46,12 @@ export class AudioReceiverMonitorData extends ReceiverMonitorData {
         if (this.nackCountPerSecond > -1) {
           data.nackCountPerSecond = this.nackCountPerSecond;
         }
+      }
+      if (this.audioLevel > -1) {
+        data.audioLevel = this.audioLevel;
+      }
+      if (this.totalAudioEnergy > -1) {
+        data.totalAudioEnergy = this.totalAudioEnergy;
       }
       return data;
     }

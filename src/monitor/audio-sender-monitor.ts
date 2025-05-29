@@ -11,7 +11,7 @@ export class AudioSenderMonitor extends Monitor {
   }
 
   getMonitorData(): AudioSenderData | undefined {
-    return this.monitorData.isActive ? this.monitorData.getMonitorData() : undefined;
+    return this.monitorData.getMonitorData();
   }
 
   protected onOutboundRTP(stats: RTCStats): void {

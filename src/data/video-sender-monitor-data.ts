@@ -78,33 +78,50 @@ export class VideoSenderMonitorData extends SenderMonitorData {
         bytesSentPerSecond: this.bytesSentPerSecond,
         packetsSent: this.packetsSent,
         packetsSentPerSecond: this.packetsSentPerSecond,
-        packetsLost: this.packetsLost,
-        packetsLostPerSecond: this.packetsLostPerSecond,
         nackCount: this.nackCount,
         nackCountPerSecond: this.nackCountPerSecond,
         currentroundTripTime: this.currentroundTripTime,
         codec: this.codec,
-        jitter: this.jitter,
         framesPerSecond: this.framesPerSecond,
         width: this.width,
         height: this.height,
-        sentFrameWidth: this.sentFrameWidth,
-        sentFrameHeight: this.sentFrameHeight,
-        sentFrameRate: this.sentFrameRate,
         totalFramesEncoded: this.totalFramesEncoded,
         framesEncodedPerSecond: this.framesEncodedPerSecond,
-        totalFramesSent: this.totalFramesSent,
-        framesSentPerSecond: this.framesSentPerSecond,
-        keyFramesencoded: this.keyFramesEncoded,
         pliCount: this.pliCount,
         pliPerSecond: this.pliPerSecond,
-        // encodeTimePerFrame: this.encodeTimePerFrame,
         encoderImplementation: this.encoderImplementation,
         qpPerSecond: this.qpPerSecond,
         qpSum: this.qpSum,
       };
       if (this.encodeTimePerFrame > -1) {
         data.encodeTimePerFrame = this.encodeTimePerFrame;
+      }
+      if (this.packetsLost > -1) {
+        data.packetsLost = this.packetsLost;
+        if (this.packetsLostPerSecond > -1) {
+          data.packetsLostPerSecond = this.packetsLostPerSecond;
+        }
+      }
+      if (this.jitter > -1) {
+        data.jitter = this.jitter;
+      }
+      if (this.sentFrameWidth > -1) {
+        data.sentFrameWidth = this.sentFrameWidth;
+      }
+      if (this.sentFrameHeight > -1) {
+        data.sentFrameHeight = this.sentFrameHeight;
+      }
+      if (this. sentFrameRate > -1) {
+        data.sentFrameRate = this.sentFrameRate;
+      }
+      if (this.totalFramesSent > -1) {
+        data.totalFramesSent = this.totalFramesSent;
+        if (this.framesSentPerSecond > -1) {
+          data.framesSentPerSecond = this.framesSentPerSecond;
+        }
+      }
+      if (this.keyFramesEncoded > -1) {
+        data.keyFramesEncoded = this.keyFramesEncoded;
       }
       return data;
     }

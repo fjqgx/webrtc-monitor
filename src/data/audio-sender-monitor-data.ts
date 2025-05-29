@@ -20,22 +20,27 @@ export class AudioSenderMonitorData extends SenderMonitorData {
         bytesSentPerSecond: this.bytesSentPerSecond,
         packetsSent: this.packetsSent,
         packetsSentPerSecond: this.packetsSentPerSecond,
-        packetsLost: this.packetsLost,
-        packetsLostPerSecond: this.packetsLostPerSecond,
-        nackCount: this.nackCount,
-        nackCountPerSecond: this.nackCountPerSecond,
         currentroundTripTime: this.currentroundTripTime,
         codec: this.codec,
-        jitter: this.jitter,
         audioLevel: this.audioLevel,
         totalAudioEnergy: this.totalAudioEnergy,
       };
+      if (this.packetsLost > -1) {
+        data.packetsLost = this.packetsLost;
+        if (this.packetsLostPerSecond > -1) {
+          data.packetsLostPerSecond = this.packetsLostPerSecond;
+        }
+      }
       if (this.nackCount > -1) {
         data.nackCount = this.nackCount;
         if (this.nackCountPerSecond > -1) {
           data.nackCountPerSecond = this.nackCountPerSecond;
         }
       }
+      if (this.jitter > -1) {
+        data.jitter = this.jitter;
+      }
+      return data;
     }
     return undefined;
   }
