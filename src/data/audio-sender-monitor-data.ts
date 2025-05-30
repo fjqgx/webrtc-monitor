@@ -25,31 +25,15 @@ export class AudioSenderMonitorData extends SenderMonitorData {
         audioLevel: this.audioLevel,
         totalAudioEnergy: this.totalAudioEnergy,
       };
-      if (this.active !== undefined) {
-        data.active = this.active;
-      }
-      if (this.packetsLost > -1) {
-        data.packetsLost = this.packetsLost;
-        if (this.packetsLostPerSecond > -1) {
-          data.packetsLostPerSecond = this.packetsLostPerSecond;
-        }
-      }
-      if (this.nackCount > -1) {
-        data.nackCount = this.nackCount;
-        if (this.nackCountPerSecond > -1) {
-          data.nackCountPerSecond = this.nackCountPerSecond;
-        }
-      }
-      if (this.jitter > -1) {
-        data.jitter = this.jitter;
-      }
+      this.addMonitorData(data);
       return data;
     }
     return undefined;
   }
 
-  onOutboundRTP (timestamp: number, active: boolean, bytesSent: number, nackCount: number, packetsSent: number): void {
-    super.onOutboundRTPData(timestamp, active, bytesSent, packetsSent, nackCount);
+  onOutboundRTP (timestamp: number, active: boolean, bytesSent: number, nackCount: number, packetsSent: number,
+    retransmittedBytesSent: number, retransmittedPacketsSent: number, totalPacketSendDelay: number): void {
+    super.onOutboundRTPData(timestamp, active, bytesSent, packetsSent, nackCount, retransmittedBytesSent, retransmittedPacketsSent, totalPacketSendDelay);
   }
 
   onMediaSource (audioLevel: number, totalAudioEnergy: number): void {

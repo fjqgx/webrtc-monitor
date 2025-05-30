@@ -16,14 +16,16 @@ export interface RTCStats {
   type: RTCStatsType;
   id: string;
   active: boolean;
+  jitter: number;
 
   nackCount: number;
   packetsLost: number;
 
   audioLevel: number;
-  jitter: number;
-
   totalAudioEnergy: number;
+  retransmittedPacketsSent: number;
+  retransmittedBytesSent: number;
+  totalPacketSendDelay: number;
 
   mimeType: string;
   timestamp: number;
@@ -33,12 +35,19 @@ export interface RTCStats {
   framesEncoded: number;
   framesSent: number;
   keyFramesEncoded: number;
+  firCount: number;
   pliCount: number;
   totalEncodeTime: number;
   width: number;
   height: number;
   encoderImplementation: string;
   qpSum: number;
+  targetBitrate: number;
+  framesDecoded: number;
+  framesDropped: number;
+  keyFramesDecoded: number;
+  framesReceived: number;
+  hugeFramesSent: number;
 
   rid?: string;
 
@@ -53,10 +62,7 @@ export interface RTCStats {
 
   playoutId: string;
 
-  framesDecoded: number;
-  framesDropped: number;
-  keyFramesDecoded: number;
-  framesReceived: number;
+  
 }
 
 export abstract class Monitor {
@@ -67,8 +73,8 @@ export abstract class Monitor {
     this.monitor = monitor;
   }
 
-  getStats (): Promise<any> {
-    return new Promise((resolve, reject) => {
+  getStats (): Promise<void> {
+    return new Promise((resolve) => {
       this.monitor && this.monitor.getStats().then((report: RTCStatsReport) => {
         report.forEach((stats: RTCStats) => {
           if (stats) {
@@ -78,7 +84,7 @@ export abstract class Monitor {
                 break;
   
               case RTCStatsType.MediaSource:
-                this.onMediaSource(stats);
+                this.onMediaSource(stats, this.monitor !== undefined ? this.monitor.track : undefined);
                 break;
   
               case RTCStatsType.Codec:
@@ -107,6 +113,7 @@ export abstract class Monitor {
           }
         })
       })
+      resolve();
     })
   }
 
@@ -118,7 +125,7 @@ export abstract class Monitor {
 
   protected onOutboundRTP (stats: RTCStats, track: MediaStreamTrack | null | undefined): void {};
 
-  protected onMediaSource (stats: RTCStats): void {};
+  protected onMediaSource (stats: RTCStats, track: MediaStreamTrack | null | undefined): void {};
 
   protected onCodec (stats: RTCStats): void {};
 

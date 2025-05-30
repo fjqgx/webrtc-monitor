@@ -43,6 +43,12 @@ export interface AudioSenderData {
   jitter?: number;
   audioLevel: number;
   totalAudioEnergy: number;
+  retransmittedBytesSent?: number;
+  retransmittedBytesSentPerSecond?: number;
+  retransmittedPacketsSent?: number;
+  retransmittedPacketsSentPerSecond?: number;
+  totalPacketSendDelay?: number;
+  avgPacketSendDelay?: number;
 }
 
 export interface VideoSenderData {
@@ -70,12 +76,24 @@ export interface VideoSenderData {
   totalFramesSent?: number;
   framesSentPerSecond?: number;
   keyFramesEncoded?: number;
+  keyFramesEncodedPerSecond?: number;
+  firCount: number;
+  firPerSecond: number;
   pliCount: number;
   pliPerSecond: number;
   encodeTimePerFrame?: number;
-  encoderImplementation: string;
+  encoderImplementation?: string;
   qpPerSecond: number;
   qpSum: number;
+  retransmittedBytesSent?: number;
+  retransmittedBytesSentPerSecond?: number;
+  retransmittedPacketsSent?: number;
+  retransmittedPacketsSentPerSecond?: number;
+  totalPacketSendDelay?: number;
+  avgPacketSendDelay?: number;
+  targetBitrate?: number;
+  hugeFramesSent?: number;
+  hugeFramesSentPerSecond?: number;
 }
 
 export interface AudioReceiverData {

@@ -18,10 +18,11 @@ export class AudioSenderMonitor extends Monitor {
     if (stats.active === undefined && track) {
       stats.active = track.enabled;
     }
-    this.monitorData.onOutboundRTP(stats.timestamp, stats.active, stats.bytesSent, stats.nackCount, stats.packetsSent);
+    this.monitorData.onOutboundRTP(stats.timestamp, stats.active, stats.bytesSent, stats.nackCount, stats.packetsSent,
+      stats.retransmittedBytesSent, stats.retransmittedPacketsSent, stats.totalPacketSendDelay);
   }
 
-  protected onMediaSource(stats: RTCStats): void {
+  protected onMediaSource(stats: RTCStats, track: MediaStreamTrack | null | undefined): void {
     this.monitorData.onMediaSource(stats.audioLevel, stats.totalAudioEnergy);
   }
 

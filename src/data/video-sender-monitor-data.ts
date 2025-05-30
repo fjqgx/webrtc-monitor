@@ -14,6 +14,9 @@ export class VideoSenderMonitorData extends SenderMonitorData {
   protected totalFramesSent: number = -1;
   protected framesSentPerSecond: number = -1;
   protected keyFramesEncoded: number = -1;
+  protected keyFramesEncodedPerSecond: number = -1;
+  protected firCount: number = -1;
+  protected firPerSecond: number = -1;
   protected pliCount: number = -1;
   protected pliPerSecond: number = -1;
   protected totalEncodeTime: number = -1;
@@ -22,15 +25,19 @@ export class VideoSenderMonitorData extends SenderMonitorData {
   protected encoderImplementation: string = '';
   protected qpSum: number = -1;
   protected qpPerSecond: number = -1;
+  protected targetBitrate: number = -1;
+  protected hugeFramesSent: number = -1;
+  protected hugeFramesSentPerSecond: number = -1;
 
   constructor () {
     super();
   }
 
   onOutboundRTP(timestamp: number, active: boolean, rid: string | undefined, bytesSent: number, packetsSent: number, nackCount: number, frameRate: number,
-    framesEncoded: number, framesSent: number, keyFramesEncoded: number, pliCount: number, totalEncodeTime: number, frameHeight: number, frameWidth: number,
-    encoderImplementation: string, qpSum: number): void {
-    super.onOutboundRTPData(timestamp, active, bytesSent, packetsSent, nackCount);
+    framesEncoded: number, framesSent: number, keyFramesEncoded: number, firCount: number, pliCount: number, totalEncodeTime: number, frameHeight: number,
+    frameWidth: number, encoderImplementation: string, qpSum: number, retransmittedBytesSent: number, retransmittedPacketsSent: number,
+    totalPacketSendDelay: number, targetBitrate: number, hugeFramesSent: number): void {
+    super.onOutboundRTPData(timestamp, active, bytesSent, packetsSent, nackCount, retransmittedBytesSent, retransmittedPacketsSent, totalPacketSendDelay);
     this.onTrack(frameWidth, frameHeight, framesSent);   
     this.sentFrameRate = frameRate;
     if (this.totalFramesEncoded > -1) {
@@ -43,7 +50,14 @@ export class VideoSenderMonitorData extends SenderMonitorData {
       }
     }
     this.totalFramesEncoded = framesEncoded;
+    if (this.keyFramesEncoded > -1) {
+      this.keyFramesEncodedPerSecond = keyFramesEncoded - this.keyFramesEncoded;
+    }
     this.keyFramesEncoded = keyFramesEncoded;
+    if (this.firCount > -1) {
+      this.firPerSecond = firCount - this.firCount;
+    }
+    this.firCount = firCount;
     if (this.pliCount > -1) {
       this.pliPerSecond = pliCount - this.pliCount;
     }
@@ -55,6 +69,11 @@ export class VideoSenderMonitorData extends SenderMonitorData {
       this.qpPerSecond = qpSum - this.qpSum;
     }
     this.qpSum = qpSum;
+    this.targetBitrate = targetBitrate;
+    if (this.hugeFramesSent > -1) {
+      this.hugeFramesSentPerSecond = hugeFramesSent - this.hugeFramesSent;
+    }
+    this.hugeFramesSent = hugeFramesSent;
   }
 
   onMediaSource (framesPerSecond: number, width: number, height: number): void {
@@ -95,26 +114,16 @@ export class VideoSenderMonitorData extends SenderMonitorData {
         height: this.height,
         totalFramesEncoded: this.totalFramesEncoded,
         framesEncodedPerSecond: this.framesEncodedPerSecond,
+        firCount: this.firCount,
+        firPerSecond: this.firPerSecond,
         pliCount: this.pliCount,
         pliPerSecond: this.pliPerSecond,
-        encoderImplementation: this.encoderImplementation,
         qpPerSecond: this.qpPerSecond,
         qpSum: this.qpSum,
       };
-      if (this.active !== undefined) {
-        data.active = this.active;
-      }
+      this.addMonitorData(data);
       if (this.encodeTimePerFrame > -1) {
         data.encodeTimePerFrame = this.encodeTimePerFrame;
-      }
-      if (this.packetsLost > -1) {
-        data.packetsLost = this.packetsLost;
-        if (this.packetsLostPerSecond > -1) {
-          data.packetsLostPerSecond = this.packetsLostPerSecond;
-        }
-      }
-      if (this.jitter > -1) {
-        data.jitter = this.jitter;
       }
       if (this.sentFrameWidth > -1) {
         data.sentFrameWidth = this.sentFrameWidth;
@@ -133,6 +142,21 @@ export class VideoSenderMonitorData extends SenderMonitorData {
       }
       if (this.keyFramesEncoded > -1) {
         data.keyFramesEncoded = this.keyFramesEncoded;
+        if (this.keyFramesEncodedPerSecond > -1) {
+          data.keyFramesEncodedPerSecond = this.keyFramesEncodedPerSecond;
+        }
+      }
+      if (this.targetBitrate > -1) {
+        data.targetBitrate = this.targetBitrate;
+      }
+      if (this.hugeFramesSent > -1) {
+        data.hugeFramesSent = this.hugeFramesSent;
+        if (this.hugeFramesSentPerSecond > -1) {
+          data.hugeFramesSentPerSecond = this.hugeFramesSent
+        }
+      }
+      if (this.encoderImplementation) {
+        data.encoderImplementation = this.encoderImplementation;
       }
       return data;
     }
@@ -151,6 +175,8 @@ export class VideoSenderMonitorData extends SenderMonitorData {
     this.totalFramesSent = -1;
     this.framesSentPerSecond = -1;
     this.keyFramesEncoded = -1;
+    this.firCount = -1;
+    this.firPerSecond = -1;
     this.pliCount = -1;
     this.pliPerSecond = -1;
     this.totalEncodeTime = -1;
@@ -159,6 +185,9 @@ export class VideoSenderMonitorData extends SenderMonitorData {
     this.encoderImplementation = '';
     this.qpSum = -1;
     this.qpPerSecond = -1;
+    this.targetBitrate = -1;
+    this.hugeFramesSent = -1;
+    this.hugeFramesSentPerSecond = -1;
   }
 }
 
